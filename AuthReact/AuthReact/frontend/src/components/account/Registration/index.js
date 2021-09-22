@@ -9,7 +9,10 @@ export class Register extends Component {
         email: '',
         name:'',
         password:'',
-        confirmpassword:''
+        confirmpassword:'',
+        errormessages: []
+         
+        
     }
 
     onChangeState=(e)=>{
@@ -26,25 +29,47 @@ export class Register extends Component {
             console.log("Server is good result----- ", result);
             this.props.history.push("/");
         }
-        catch(error) {
-            console.log("Server is bad ", error.response.data.errors);
-        }
+        catch(error)
+        {
+            
+            this.setState({errormessages:error.response.data.errors});
+             console.log(this.state.errormessages);
+
+            //  this.setState({formErrors:error.response.data.errors});
+            //  console.log(this.state.formErrors);
+            // const firstError = formErrors[Object.keys(formErrors)[0]];
+            // console.log(firstError);          
+            
+        }       
+              
+            
+        
     }
+
+   
+
 
     render() {
         //console.log("state",this.state);
         const{email,name,password,confirmpassword}=this.state;
+
+        const {errormessages} = this.state.errormessages; //як називається
+        const listItems = errormessages.map((data, i) =>
+            {return <p key={i+"ttt"} className="text-danger">{data.email}</p> }
+        );
+       console.log(listItems);
         return (
 
             <div className="row">
                 <div className="offset-md-3 col-md-6">
                     <h1 className="text-center text-primary">Реєстрація</h1>
-                    <form onSubmit={this.onSubmitHandler}>
+                    <form onSubmit={this.onSubmitHandler}>                      
                     <TextPropFields 
                         field="email"
                         label="E-mail"
                         value={email}
-                        onChangeHandler={this.onChangeState}/>
+                       onChangeHandler={this.onChangeState}
+                        />                         
 
                     <TextPropFields 
                         field="name"
