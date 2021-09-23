@@ -10,7 +10,9 @@ export class Register extends Component {
         name:'',
         password:'',
         confirmpassword:'',
-        errormessages: []
+        errormessages: {
+            email: ''
+        }
          
         
     }
@@ -34,7 +36,7 @@ export class Register extends Component {
             
             this.setState({errormessages:error.response.data.errors});
              console.log(this.state.errormessages);
-
+            
             //  this.setState({formErrors:error.response.data.errors});
             //  console.log(this.state.formErrors);
             // const firstError = formErrors[Object.keys(formErrors)[0]];
@@ -51,13 +53,7 @@ export class Register extends Component {
 
     render() {
         //console.log("state",this.state);
-        const{email,name,password,confirmpassword}=this.state;
-
-        const {errormessages} = this.state.errormessages; //як називається
-        const listItems = errormessages.map((data, i) =>
-            {return <p key={i+"ttt"} className="text-danger">{data.email}</p> }
-        );
-       console.log(listItems);
+        const{email,name,password,confirmpassword}=this.state;       
         return (
 
             <div className="row">
@@ -69,7 +65,8 @@ export class Register extends Component {
                         label="E-mail"
                         value={email}
                        onChangeHandler={this.onChangeState}
-                        />                         
+                        />   
+                         {/* {!!errormessages.email &&<span className="text-danger">{errormessages}</span> }                    */}
 
                     <TextPropFields 
                         field="name"
