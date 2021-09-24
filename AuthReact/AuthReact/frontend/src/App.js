@@ -4,6 +4,7 @@ import Navbar from './components/navbar/navbar';
 import Register from './components/account/Registration';
 import Login from './components/account/Login';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
+import ReactDOM from 'react-dom';
 
 function App() {
   return (

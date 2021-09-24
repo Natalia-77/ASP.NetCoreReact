@@ -25,11 +25,11 @@ namespace AuthReact.Models
 
         public UserValidator()
         {
-            RuleFor(x => x.Email).NotNull().NotEmpty().WithMessage("Поле не може бути пустим");
-            RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Поле не може бути пустим");
-            RuleFor(x => x.Password).NotNull().NotEmpty().WithMessage("Поле не може бути пустим");
+            RuleFor(x => x.Email).NotNull().NotEmpty().WithMessage("Поле не може бути пустим!");
+            RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Поле не може бути пустим ");
+            RuleFor(x => x.Password).NotNull().NotEmpty().WithMessage("Поле не може бути пустим  ");
             RuleFor(x => x.Password).Length(5, 100).WithMessage("Пароль не може бути менше 5 символів");
-            RuleFor(x => x.ConfirmPassword).NotNull().NotEmpty().WithMessage("Поле не може бути пустим");
+            RuleFor(x => x.ConfirmPassword).NotNull().NotEmpty().WithMessage("Поле не може бути пустим   ");
             RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("Пароль і підтверджений пароль не співпадають");
 
 
