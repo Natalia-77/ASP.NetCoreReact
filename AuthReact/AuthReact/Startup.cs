@@ -1,3 +1,4 @@
+using AuthReact.Constants;
 using AuthReact.Models;
 using CarShop.Domain;
 using CarShop.Domain.Entities.Identity;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Linq;
 using System.Reflection;
 
 namespace AuthReact
@@ -54,7 +56,7 @@ namespace AuthReact
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<AppRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -67,7 +69,23 @@ namespace AuthReact
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            if (!roleManager.Roles.Any())
+            {
+                var result = roleManager.CreateAsync(new AppRole
+                {
+                    Name = Roles.Admin
+                }).Result;
 
+                result = roleManager.CreateAsync(new AppRole
+                {
+                    Name = Roles.User
+                }).Result;
+
+                result = roleManager.CreateAsync(new AppRole
+                {
+                    Name = Roles.Operator
+                }).Result;
+            }
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

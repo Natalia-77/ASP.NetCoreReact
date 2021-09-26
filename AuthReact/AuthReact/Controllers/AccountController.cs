@@ -1,4 +1,5 @@
-﻿using AuthReact.Models;
+﻿using AuthReact.Constants;
+using AuthReact.Models;
 using CarShop.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -31,24 +32,43 @@ namespace AuthReact.Controllers
         [Route("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegistrateViewModel model)
         {
-            UserValidator validationRules = new();
-            var res = validationRules.ValidateAsync(model);
+            //UserValidator validationRules = new();
+            //var res = validationRules.ValidateAsync(model);
 
-            //якщо модель не валідна:
-            if (!res.Result.IsValid)
+            ////якщо модель не валідна:
+            //if (!res.Result.IsValid)
+            //{
+            //    return BadRequest(res.Result.Errors);
+            //}
+
+            ////шукаю користувача по емейлу.
+            //var user = await _userManager.FindByEmailAsync(model.Email);
+
+            ////якщо такий користувач вже існує:
+            //if (user != null)
+            //{
+            //    return BadRequest(new { message = "Такий користувач вже існує" });
+            //}
+
+            var user = new AppUser
             {
-                return BadRequest(res.Result.Errors);
-            }
+                Email = model.Email,
+                UserName = model.Name
 
-            //шукаю користувача по емейлу.
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            };
 
-            //якщо такий користувач вже існує:
-            if(user!=null)
+            var role = new AppRole
             {
-                return BadRequest(new { message = "Такий користувач вже існує" });
-            }
+                Name = Roles.User
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
 
+            if (!result.Succeeded)
+                return BadRequest(new { message = result.Errors });
+            
+            await _userManager.AddToRoleAsync(user, role.Name);
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok();
         }

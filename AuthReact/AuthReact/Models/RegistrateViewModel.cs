@@ -1,5 +1,7 @@
 ﻿
+using CarShop.Domain.Entities.Identity;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,21 +24,37 @@ namespace AuthReact.Models
 
     public class UserValidator : AbstractValidator<RegistrateViewModel>
     {
+        
 
-        public UserValidator()
+
+        public UserValidator()    
         {
-            RuleFor(x => x.Email).NotNull().NotEmpty().WithMessage("Поле не може бути пустим!");
-            RuleFor(x => x.Name).NotNull().NotEmpty().WithMessage("Поле не може бути пустим ");
-            RuleFor(x => x.Password).NotNull().NotEmpty().WithMessage("Поле не може бути пустим  ");
-            RuleFor(x => x.Password).Length(5, 100).WithMessage("Пароль не може бути менше 5 символів");
-            RuleFor(x => x.ConfirmPassword).NotNull().NotEmpty().WithMessage("Поле не може бути пустим   ");
-            RuleFor(x => x.ConfirmPassword).Equal(x => x.Password).WithMessage("Пароль і підтверджений пароль не співпадають");
+
+           
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("Поле не може бути пустим!")
+                .EmailAddress().WithMessage("Не валідні дані");  
+            
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Поле не може бути пустим ");
+
+            RuleFor(x => x.Password)
+                .NotEmpty().WithMessage("Поле не може бути пустим  ")
+                .Length(3, 100).WithMessage("Пароль не може бути менше 3 символів")
+                .Matches(@"\d").WithName("Password").WithMessage("Пароль повинен містити хоча б одну цифру ");
+            
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("Поле не може бути пустим   ")
+                .Equal(x => x.Password).WithMessage("Пароль і підтверджений пароль не співпадають");
 
 
 
         }
 
        
+
+
+
 
 
     }

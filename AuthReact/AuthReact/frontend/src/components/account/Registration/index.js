@@ -2,10 +2,7 @@ import React, { Component } from 'react'
 import register_service from '../../../service/register_service';
 import TextPropFields from '../../common/TextPropFields';
 import { withRouter } from "react-router-dom";
-
-import ReactDOM from 'react-dom';
-
-
+import classnames from 'classnames';
 export class Register extends Component {
 
    
@@ -14,15 +11,20 @@ export class Register extends Component {
         name:'',
         password:'',
         confirmpassword:'',        
-        errormessage:{       
-        }       
-         
-    }
+        errormessage:   {
+            email:'',
+            name:'',
+            password:'',
+            confirmpassword:''
+        }     
+                   
+   }
     
 
-    onChangeState=(e)=>{       
+    onChangeState=(e)=>{
+               
+            this.setState({[e.target.name]:e.target.value });             
         
-            this.setState({[e.target.name]:e.target.value  });
      }    
     
     onSubmitHandler=async(e)=>{
@@ -35,22 +37,70 @@ export class Register extends Component {
             this.props.history.push("/");
         }
         catch(error)
-        {
-            //this.setState({ errormessage: error.response.data.errors, isLoaded: true });
-            //console.log(this.state.isLoaded);
-            var u = error.response.data.errors;
-            var p = Object.keys(u).map((key) => u[key]);           
-            const listItems = p.map((item) => <li key={item +"1"} >{item}</li>);
-            this.setState({ errormessage: listItems});
-            console.log(this.state.errormessage);               
-                    
+        {          
+           
+            //var u=error.response.data.errors;            
+            //  var p = Object.keys(u).map((key) => u[key]);           
+            //  var listItems = p.map((item) => <li key={item +"1"} >{item}</li>);
+            // this.setState({errormessage:listItems});    
+              
             
-        }           
-       
-        
-    }
 
-    
+            let answer_errors={
+                email:'',
+                name:'',
+                password:'',
+                confirmpassword:''
+            };
+
+            var res = error.response.data.errors;
+            console.log(res);    
+            if(res.Email!=null)
+            {
+                let str="";
+                res.Email.forEach(element => {
+                    str+=element+" ";
+                    console.log(element);
+                });
+                answer_errors.email=str;
+            }
+           
+            if(res.Name)
+            {
+                let str="";
+                    res.Name.forEach(element => {
+                        str+=element+" ";
+                        console.log(element);
+                    });
+                    answer_errors.name=str;
+           }
+
+           if(res.Password)
+           {
+               let str="";
+                   res.Password.forEach(element => {
+                       str+=element+" ";
+                       console.log(element);
+                   });
+                   answer_errors.password=str;
+           }
+
+           if(res.ConfirmPassword)
+           {
+               let str="";
+                   res.ConfirmPassword.forEach(element => {
+                       str+=element+" ";
+                       console.log(element);
+                   });
+                   answer_errors.confirmpassword=str;
+           }           
+            
+           
+             this.setState({errormessage:answer_errors});
+             console.log(this.state.errormessage.confirmpassword);
+       }           
+               
+    }   
 
 
     render() {
@@ -61,36 +111,41 @@ export class Register extends Component {
 
             <div className="row">
                 <div className="offset-md-3 col-md-6">
-                    <h1 className="text-center text-primary">Реєстрація</h1>               
-                 <form onSubmit={this.onSubmitHandler}> 
-                    
-                    <TextPropFields 
-                        field="email"
-                        label="E-mail"
-                        value={email}
-                       onChangeHandler={this.onChangeState}/>                           
-                         {!!errormessage[0] ? <span className="text-danger"  >{errormessage[0]}</span> :' '}                      
-                         
-                    <TextPropFields 
+                    <h1 className="text-center text-primary">Реєстрація</h1>
+                    <form className="row g-3 was-validated" onSubmit={this.onSubmitHandler}>
+                      
+                            <TextPropFields
+                                field="email"
+                                label="E-mail"
+                                value={email}
+                                onChangeHandler={this.onChangeState} />                       
+                        {!!errormessage.email && <span className="text-danger">{errormessage.email}</span>}
+                               
+                     <TextPropFields 
                         field="name"
                         label="Name"
                         value={name}
                         onChangeHandler={this.onChangeState}/>
-                        {!!errormessage[1] ? <span className="text-danger" >{errormessage[1]}</span> : ' '}
+                       {!!errormessage.name &&<span className="text-danger">{errormessage.name}</span> }
                        
+                      
+                      
                     <TextPropFields 
                         field="password"
                         label="Password"
                         value={password}
                         onChangeHandler={this.onChangeState}/>
-                      {!!errormessage[2] ? <span className="text-danger" >{errormessage[2]}</span> : ' '}
+                      {!!errormessage.password &&<span className="text-danger">{errormessage.password}</span>}
+                     
 
+                      
                     <TextPropFields 
                         field="confirmpassword"
                         label="Confirm password"
                         value={confirmpassword}
                         onChangeHandler={this.onChangeState}/>    
-                      {!!errormessage[3] ? <span className="text-danger" >{errormessage[3]}</span> : ' '}
+                      {!!errormessage.confirmpassword &&<span className="text-danger">{errormessage.confirmpassword}</span> }
+                     
                       <button type="submit" className="btn btn-primary">Реєстрація</button>  
 
                     </form>

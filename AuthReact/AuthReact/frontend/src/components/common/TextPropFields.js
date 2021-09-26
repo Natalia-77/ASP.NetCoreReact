@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import classnames from "classnames";
 
 const TextPropFields = ({
     field,
@@ -8,14 +9,15 @@ const TextPropFields = ({
     onChangeHandler
 }) => {
     return (
-        <div className="mb-3">
+        <div className="col-md-12" >
             <label htmlFor={field} className="form-label">{label}</label>
             <input type={type}
                 className="form-control"
                 id={field}
                 name={field}
                 value={value}
-                onChange={onChangeHandler}
+                onChange={onChangeHandler} 
+                              
             />
         </div>
     );
