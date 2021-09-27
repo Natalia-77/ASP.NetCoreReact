@@ -1,4 +1,5 @@
 ﻿
+using CarShop.Domain;
 using CarShop.Domain.Entities.Identity;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
@@ -24,16 +25,17 @@ namespace AuthReact.Models
 
     public class UserValidator : AbstractValidator<RegistrateViewModel>
     {
-        
+        private readonly AppEFContext _appEFContext;
 
 
-        public UserValidator()    
+        public UserValidator(AppEFContext appEFContext)    
         {
-
+            _appEFContext = appEFContext;
            
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage(" Поле не може бути пустим!")
-                .EmailAddress().WithMessage(" Пароль має містити '@'");  
+                .EmailAddress().WithMessage(" Пароль має містити '@'")
+                .Must(BeValidEmail).WithName("Email").WithMessage("Такий користувач вже існує!");  
             
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Поле не може бути пустим ");
@@ -51,7 +53,16 @@ namespace AuthReact.Models
 
         }
 
-       
+        private bool BeValidEmail(string email)
+        {
+            //var user = _userManager.FindByEmailAsync(email).Result;
+            var user = _appEFContext.Users.FirstOrDefault(x => x.Email == email);
+            if(user==null)
+            {
+                return true;
+            }
+            return false;
+        }
 
 
 

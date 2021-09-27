@@ -69,7 +69,7 @@ export class Register extends Component {
              let err_confpass=[];
 
              var res = error.response.data.errors;
-           
+           console.log(error.response.data);
             
             if(res.Email)
             {
