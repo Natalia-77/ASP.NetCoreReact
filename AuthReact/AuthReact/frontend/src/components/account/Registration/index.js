@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import register_service from '../../../service/register_service';
 import TextPropFields from '../../common/TextPropFields';
 import { withRouter } from "react-router-dom";
-import classnames from 'classnames';
+
+
 export class Register extends Component {
 
    
@@ -11,12 +12,19 @@ export class Register extends Component {
         name:'',
         password:'',
         confirmpassword:'',        
-        errormessage:   {
-            email:'',
-            name:'',
-            password:'',
-            confirmpassword:''
-        }     
+        // errormessage:   {
+        //     email:'',
+        //     name:'',
+        //     password:'',
+        //     confirmpassword:''
+        // }    
+         errormessage_email:[],
+         errormessage_name:[] ,
+         errormessage_pass:[],
+         errormessage_confpass:[]
+              
+            
+         
                    
    }
     
@@ -46,67 +54,167 @@ export class Register extends Component {
               
             
 
-            let answer_errors={
-                email:'',
-                name:'',
-                password:'',
-                confirmpassword:''
-            };
+            // let answer_errors={
+            //     email:'',
+            //     name:'',
+            //     password:'',
+            //     confirmpassword:''
+            // };
 
-            var res = error.response.data.errors;
-            console.log(res);    
-            if(res.Email!=null)
-            {
-                let str="";
-                res.Email.forEach(element => {
-                    str+=element+" ";
-                    console.log(element);
-                });
-                answer_errors.email=str;
-            }
+
+            //масиви для запису помилок,відповідно до поля.
+             let err=[];
+             let err_name=[];
+             let err_pass=[];
+             let err_confpass=[];
+
+             var res = error.response.data.errors;
            
+            
+            if(res.Email)
+            {
+                for (let index = 0; index < res.Email.length; index++) {
+                    
+                    err.push(res.Email[index]);
+                }               
+            }
             if(res.Name)
             {
-                let str="";
-                    res.Name.forEach(element => {
-                        str+=element+" ";
-                        console.log(element);
-                    });
-                    answer_errors.name=str;
-           }
+                for (let index = 0; index < res.Name.length; index++) {
+                    
+                    err_name.push(res.Name[index]);
+                }               
+            }
+            if(res.Password)
+            {
+                for (let index = 0; index < res.Password.length; index++) {
+                    
+                    err_pass.push(res.Password[index]);
+                }               
+            }
+            if(res.ConfirmPassword)
+            {
+                for (let index = 0; index < res.ConfirmPassword.length; index++) {
+                    
+                    err_confpass.push(res.ConfirmPassword[index]);
+                }               
+            }
 
-           if(res.Password)
-           {
-               let str="";
-                   res.Password.forEach(element => {
-                       str+=element+" ";
-                       console.log(element);
-                   });
-                   answer_errors.password=str;
-           }
 
-           if(res.ConfirmPassword)
-           {
-               let str="";
-                   res.ConfirmPassword.forEach(element => {
-                       str+=element+" ";
-                       console.log(element);
-                   });
-                   answer_errors.confirmpassword=str;
-           }           
+           
+        //     if(res.Name)
+        //     {
+        //         let str="";
+        //             res.Name.forEach(element => {
+        //                 str+=element+" ";
+        //                 console.log(element);
+        //             });
+        //             answer_errors.name=str;
+        //    }
+
+        //    if(res.Password)
+        //    {
+        //        let str="";
+        //            res.Password.forEach(element => {
+        //                str+=element+" ";
+        //                console.log(element);
+        //            });
+        //            answer_errors.password=str;
+        //    }
+
+        //    if(res.ConfirmPassword)
+        //    {
+        //        let str="";
+        //            res.ConfirmPassword.forEach(element => {
+        //                str+=element+" ";
+        //                console.log(element);
+        //            });
+        //            answer_errors.confirmpassword=str;
+        //    }           
             
            
-             this.setState({errormessage:answer_errors});
-             console.log(this.state.errormessage.confirmpassword);
+             this.setState({errormessage_email:err});
+             this.setState({errormessage_name:err_name});
+             this.setState({errormessage_pass:err_pass});
+             this.setState({errormessage_confpass:err_confpass});
+           
+             
        }           
                
     }   
 
+    //вивід у вигляді таблиці помилок по полю електронної пошти.
+    createTableEmail = () => {
+
+        let table = []
+        for (let i = 0; i < this.state.errormessage_email.length; i++) {
+            let children = []
+
+            for (let j = 0; j < 1; j++)
+            {
+                children.push(<td className="text-danger" key={j} >{this.state.errormessage_email[i]}</td>)
+            }            
+
+            table.push(<tr key={i}>{children}</tr>)
+        }
+        return table
+    }
+
+    //вивід у вигляді таблиці помилок по полю імені.
+    createTableName = () => {
+
+        let table = []
+        for (let i = 0; i < this.state.errormessage_name.length; i++) {
+            let children = []
+
+            for (let j = 0; j < 1; j++)
+            {
+                children.push(<td className="text-danger" key={j} >{this.state.errormessage_name[i]}</td>)
+            }            
+
+            table.push(<tr key={i}>{children}</tr>)
+        }
+        return table
+    }
+
+    //вивід у вигляді таблиці помилок по полю пароль.
+    createTablePass = () => {
+
+        let table = []
+        for (let i = 0; i < this.state.errormessage_pass.length; i++) {
+            let children = []
+
+            for (let j = 0; j < 1; j++)
+            {
+                children.push(<td className="text-danger" key={j} >{this.state.errormessage_pass[i]}</td>)
+            }            
+
+            table.push(<tr key={i}>{children}</tr>)
+        }
+        return table
+    }
+
+    createTableConfPass = () => {
+
+        let table = []
+        for (let i = 0; i < this.state.errormessage_confpass.length; i++) {
+            let children = []
+
+            for (let j = 0; j < 1; j++)
+            {
+                children.push(<td className="text-danger" key={j} >{this.state.errormessage_confpass[i]}</td>)
+            }            
+
+            table.push(<tr key={i}>{children}</tr>)
+        }
+        return table
+    }
+
 
     render() {
         
-        const{email,name,password,confirmpassword,errormessage}=this.state;    
-      
+        const{email,name,password,confirmpassword}=this.state;    
+       
         return (
 
             <div className="row">
@@ -118,33 +226,58 @@ export class Register extends Component {
                                 field="email"
                                 label="E-mail"
                                 value={email}
-                                onChangeHandler={this.onChangeState} />                       
-                        {!!errormessage.email && <span className="text-danger">{errormessage.email}</span>}
-                               
-                     <TextPropFields 
-                        field="name"
-                        label="Name"
-                        value={name}
-                        onChangeHandler={this.onChangeState}/>
-                       {!!errormessage.name &&<span className="text-danger">{errormessage.name}</span> }
+                                onChangeHandler={this.onChangeState} /> 
+                                <div mb-3="true">                               
+                                    <table>
+                                        <tbody>
+                                        {this. createTableEmail()}
+                                        </tbody>
+                                    </table>
+                                </div>                                    
                        
+                                    
+                            <TextPropFields 
+                                field="name"
+                                label="Name"
+                                value={name}
+                                onChangeHandler={this.onChangeState}/>
+                                <div mb-3="true">
+                                    <table>
+                                        <tbody>
+                                            {this.createTableName()}
+                                        </tbody>
+                                    </table>
+                                </div>                                   
                       
                       
-                    <TextPropFields 
-                        field="password"
-                        label="Password"
-                        value={password}
-                        onChangeHandler={this.onChangeState}/>
-                      {!!errormessage.password &&<span className="text-danger">{errormessage.password}</span>}
-                     
+                            <TextPropFields 
+                                field="password"
+                                label="Password"
+                                value={password}
+                                onChangeHandler={this.onChangeState}/>
+                                <div mb-3="true">                               
+                                <table>
+                                    <tbody>
+                                    {this.createTablePass()}
+                                    </tbody>
+                                </table>
+                                </div>
+                                                
 
-                      
-                    <TextPropFields 
-                        field="confirmpassword"
-                        label="Confirm password"
-                        value={confirmpassword}
-                        onChangeHandler={this.onChangeState}/>    
-                      {!!errormessage.confirmpassword &&<span className="text-danger">{errormessage.confirmpassword}</span> }
+                            
+                            <TextPropFields 
+                                field="confirmpassword"
+                                label="Confirm password"
+                                value={confirmpassword}
+                                onChangeHandler={this.onChangeState}/>    
+                                <div mb-3="true">                               
+                                <table>
+                                    <tbody>
+                                    {this.createTableConfPass()}
+                                    </tbody>
+                                </table>
+                                </div>    
+                    
                      
                       <button type="submit" className="btn btn-primary">Реєстрація</button>  
 
