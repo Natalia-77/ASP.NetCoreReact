@@ -31,24 +31,7 @@ namespace AuthReact.Controllers
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegistrateViewModel model)
-        {
-            //UserValidator validationRules = new();
-            //var res = validationRules.ValidateAsync(model);
-
-            ////якщо модель не валідна:
-            //if (!res.Result.IsValid)
-            //{
-            //    return BadRequest(res.Result.Errors);
-            //}
-
-            ////шукаю користувача по емейлу.
-            //var user = await _userManager.FindByEmailAsync(model.Email);
-
-            ////якщо такий користувач вже існує:
-            //if (user != null)
-            //{
-            //    return BadRequest(new { message = "Такий користувач вже існує" });
-            //}
+        {    
 
             var user = new AppUser
             {

@@ -213,20 +213,21 @@ export class Register extends Component {
 
     render() {
         
-        const{email,name,password,confirmpassword}=this.state;    
+        const{email,name,password,confirmpassword,errormessage_email, errormessage_name,errormessage_pass,errormessage_confpass}=this.state;    
        
         return (
 
             <div className="row">
                 <div className="offset-md-3 col-md-6">
                     <h1 className="text-center text-primary">Реєстрація</h1>
-                    <form className="row g-3 was-validated" onSubmit={this.onSubmitHandler}>
+                    <form className="row g-3 needs-validation" onSubmit={this.onSubmitHandler}>
                       
                             <TextPropFields
                                 field="email"
                                 label="E-mail"
                                 value={email}
-                                onChangeHandler={this.onChangeState} /> 
+                                onChangeHandler={this.onChangeState}
+                                isvalid={errormessage_email == 0? true : false} /> 
                                 <div mb-3="true">                               
                                     <table>
                                         <tbody>
@@ -240,7 +241,8 @@ export class Register extends Component {
                                 field="name"
                                 label="Name"
                                 value={name}
-                                onChangeHandler={this.onChangeState}/>
+                                onChangeHandler={this.onChangeState}
+                                isvalid={errormessage_name == 0? true : false} />
                                 <div mb-3="true">
                                     <table>
                                         <tbody>
@@ -254,7 +256,8 @@ export class Register extends Component {
                                 field="password"
                                 label="Password"
                                 value={password}
-                                onChangeHandler={this.onChangeState}/>
+                                onChangeHandler={this.onChangeState}
+                                isvalid={errormessage_pass == 0? true : false} />
                                 <div mb-3="true">                               
                                 <table>
                                     <tbody>
@@ -269,7 +272,8 @@ export class Register extends Component {
                                 field="confirmpassword"
                                 label="Confirm password"
                                 value={confirmpassword}
-                                onChangeHandler={this.onChangeState}/>    
+                                onChangeHandler={this.onChangeState}
+                                isvalid={errormessage_confpass == 0? true : false} />    
                                 <div mb-3="true">                               
                                 <table>
                                     <tbody>
