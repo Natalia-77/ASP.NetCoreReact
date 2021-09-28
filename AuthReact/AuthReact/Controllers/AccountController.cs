@@ -31,29 +31,37 @@ namespace AuthReact.Controllers
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegistrateViewModel model)
-        {    
-
-            var user = new AppUser
+        {
+            try
             {
-                Email = model.Email,
-                UserName = model.Name
 
-            };
+                var user = new AppUser
+                {
+                    Email = model.Email,
+                    UserName = model.Name
 
-            var role = new AppRole
+                };
+
+                var role = new AppRole
+                {
+                    Name = Roles.User
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (!result.Succeeded)
+                    return BadRequest(new { message = result.Errors });
+
+                await _userManager.AddToRoleAsync(user, role.Name);
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return Ok();
+            }
+            catch
             {
-                Name = Roles.User
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
+                return BadRequest(new { message = "Щось пішло не так - помилка з БД" });
 
-            if (!result.Succeeded)
-                return BadRequest(new { message = result.Errors });
-            
-            await _userManager.AddToRoleAsync(user, role.Name);
-
-            await _signInManager.SignInAsync(user, isPersistent: false);
-
-            return Ok();
+            }
         }
 
 
