@@ -1,12 +1,23 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {logoutservice} from '../../service/logout.service';
+import {LOG_OUT} from '../../actions/types';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 
 
 const Navbar =()=> {
   
-   
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+   const logout=()=> {
+    logoutservice.logout();
+        dispatch({type: LOG_OUT});
+        history.push('/');
+    };
         const {role} = useSelector(res=>res.auth);
        
         return (
@@ -34,15 +45,13 @@ const Navbar =()=> {
                         :
                         <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/profile">Hello user with role {role}</Link>
+                            <Link className="nav-link" to="/profile"> {role}</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/logout">Вихід</Link>
+                            <Link to="/" className="nav-link" onClick={logout}>Вихід</Link>
                         </li>
                     </ul>
-
-                        }
-    
+                        }   
 
                     </div>
                 </div>

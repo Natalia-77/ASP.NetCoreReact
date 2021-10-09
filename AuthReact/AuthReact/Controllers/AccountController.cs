@@ -72,5 +72,25 @@ namespace AuthReact.Controllers
         }
 
 
+        [HttpPost]
+        [Route("login")]
+       
+        public async Task<IActionResult> Login([FromForm] LoginViewModel model)
+        {
+            var result = await _signInManager
+                .PasswordSignInAsync(model.Email, model.Password, false, false);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Incorrect data!" });
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            return Ok(new
+            {
+                token = _tokenService.Authentificate(user)
+            });
+        }
+
     }
 }
