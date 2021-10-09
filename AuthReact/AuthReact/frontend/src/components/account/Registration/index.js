@@ -1,296 +1,124 @@
-import React, { Component } from 'react'
+import React from 'react'
 import register_service from '../../../service/register_service';
-import TextPropFields from '../../common/TextPropFields';
-import { withRouter } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
+import { Formik, Form } from 'formik'
+import TextInput from '../../common/TextInput'
+import { useDispatch } from 'react-redux';
+import validate from './validation'
+import { REGISTER_AUTH,ERRORS } from '../../../actions/types';
+import { useSelector } from 'react-redux'
+import authTokenRequest from '../../../service/auth_request';
+import jwt from 'jsonwebtoken';
 
 
-export class Register extends Component {
+const Register = () => {
 
-   
-    state = {
+    const initState = {
         email: '',
-        name:'',
-        password:'',
-        confirmpassword:'',        
-        // errormessage:   {
-        //     email:'',
-        //     name:'',
-        //     password:'',
-        //     confirmpassword:''
-        // }    
-         errormessage_email:[],
-         errormessage_name:[] ,
-         errormessage_pass:[],
-         errormessage_confpass:[]
-              
-            
-         
+        name: '',
+        password: '',
+        confirmpassword: ''          
+
+    }
+
+    const history = useHistory();
+    const dispatch = useDispatch();
+
+    const onSubmitHandler = async (values) => {
+
+        try {
+            const result = await register_service.register(values);
+           
+            console.log("Відправлені дані: ", values);
+            console.log("Result data:",result.data.token);
+
+            var jwt_token=result.data.token;
+
+            var verified = jwt.decode(jwt_token);            
+            console.log("Verified.roles:",verified.roles);
+            dispatch({type: REGISTER_AUTH, payload: verified});
+
+           
+            localStorage.setItem('Current user',jwt_token);
+            console.log("Local:",localStorage);
+            authTokenRequest(jwt_token);
+            history.push("/");
+        }
+        catch (problem) {
+            //обробка помилок валідації на стороні сервера.
+            var res = problem.response.data.errors;
                    
-   }
-    
+            console.log("Errors:",res);
+            let answer_errors={
+                    email:'',                    
+                };
 
-    onChangeState=(e)=>{
-               
-            this.setState({[e.target.name]:e.target.value });             
-        
-     }    
-    
-    onSubmitHandler=async(e)=>{
-        e.preventDefault();
-        console.log("Посилаємо на сервер", this.state);
-        //register_service.register(this.state);
-        try{
-            const result = await register_service.register(this.state);
-            console.log("Відправлені дані: ", result);
-            this.props.history.push("/");
-        }
-        catch(error)
-        {          
-           
-            //var u=error.response.data.errors;            
-            //  var p = Object.keys(u).map((key) => u[key]);           
-            //  var listItems = p.map((item) => <li key={item +"1"} >{item}</li>);
-            // this.setState({errormessage:listItems});    
-              
-            
-
-            // let answer_errors={
-            //     email:'',
-            //     name:'',
-            //     password:'',
-            //     confirmpassword:''
-            // };
-
-
-            //масиви для запису помилок,відповідно до поля.
-             let err=[];
-             let err_name=[];
-             let err_pass=[];
-             let err_confpass=[];
-
-             var res = error.response.data.errors;
-           console.log(error.response.data);
-            
-            if(res.Email)
-            {
-                for (let index = 0; index < res.Email.length; index++) {
-                    
-                    err.push(res.Email[index]);
-                }               
+            if (res.Email) {
+                let str = "";
+                res.Email.forEach(element => {
+                    str += element + " ";
+                   // console.log(element);
+                });
+                answer_errors.email = str;
             }
-            if(res.Name)
-            {
-                for (let index = 0; index < res.Name.length; index++) {
-                    
-                    err_name.push(res.Name[index]);
-                }               
-            }
-            if(res.Password)
-            {
-                for (let index = 0; index < res.Password.length; index++) {
-                    
-                    err_pass.push(res.Password[index]);
-                }               
-            }
-            if(res.ConfirmPassword)
-            {
-                for (let index = 0; index < res.ConfirmPassword.length; index++) {
-                    
-                    err_confpass.push(res.ConfirmPassword[index]);
-                }               
-            }
+            dispatch({type:ERRORS,payloads:answer_errors.email});          
+       }
 
-
-           
-        //     if(res.Name)
-        //     {
-        //         let str="";
-        //             res.Name.forEach(element => {
-        //                 str+=element+" ";
-        //                 console.log(element);
-        //             });
-        //             answer_errors.name=str;
-        //    }
-
-        //    if(res.Password)
-        //    {
-        //        let str="";
-        //            res.Password.forEach(element => {
-        //                str+=element+" ";
-        //                console.log(element);
-        //            });
-        //            answer_errors.password=str;
-        //    }
-
-        //    if(res.ConfirmPassword)
-        //    {
-        //        let str="";
-        //            res.ConfirmPassword.forEach(element => {
-        //                str+=element+" ";
-        //                console.log(element);
-        //            });
-        //            answer_errors.confirmpassword=str;
-        //    }           
-            
-           
-             this.setState({errormessage_email:err});
-             this.setState({errormessage_name:err_name});
-             this.setState({errormessage_pass:err_pass});
-             this.setState({errormessage_confpass:err_confpass});
-           
-             
-       }           
-               
-    }   
-
-    //вивід у вигляді таблиці помилок по полю електронної пошти.
-    createTableEmail = () => {
-
-        let table = []
-        for (let i = 0; i < this.state.errormessage_email.length; i++) {
-            let children = []
-
-            for (let j = 0; j < 1; j++)
-            {
-                children.push(<td className="text-danger" key={j} >{this.state.errormessage_email[i]}</td>)
-            }            
-
-            table.push(<tr key={i}>{children}</tr>)
-        }
-        return table
-    }
-
-    //вивід у вигляді таблиці помилок по полю імені.
-    createTableName = () => {
-
-        let table = []
-        for (let i = 0; i < this.state.errormessage_name.length; i++) {
-            let children = []
-
-            for (let j = 0; j < 1; j++)
-            {
-                children.push(<td className="text-danger" key={j} >{this.state.errormessage_name[i]}</td>)
-            }            
-
-            table.push(<tr key={i}>{children}</tr>)
-        }
-        return table
-    }
-
-    //вивід у вигляді таблиці помилок по полю пароль.
-    createTablePass = () => {
-
-        let table = []
-        for (let i = 0; i < this.state.errormessage_pass.length; i++) {
-            let children = []
-
-            for (let j = 0; j < 1; j++)
-            {
-                children.push(<td className="text-danger" key={j} >{this.state.errormessage_pass[i]}</td>)
-            }            
-
-            table.push(<tr key={i}>{children}</tr>)
-        }
-        return table
-    }
-
-    createTableConfPass = () => {
-
-        let table = []
-        for (let i = 0; i < this.state.errormessage_confpass.length; i++) {
-            let children = []
-
-            for (let j = 0; j < 1; j++)
-            {
-                children.push(<td className="text-danger" key={j} >{this.state.errormessage_confpass[i]}</td>)
-            }            
-
-            table.push(<tr key={i}>{children}</tr>)
-        }
-        return table
     }
 
 
-    render() {
-        
-        const{email,name,password,confirmpassword,errormessage_email, errormessage_name,errormessage_pass,errormessage_confpass}=this.state;    
-       
-        return (
+    const {errorvalid} = useSelector(res=>res.valid);
+    console.log("Error valid",errorvalid);
 
-            <div className="row">
-                <div className="offset-md-3 col-md-6">
-                    <h1 className="text-center text-primary">Реєстрація</h1>
-                    <form className="row g-3 needs-validation" onSubmit={this.onSubmitHandler}>
-                      
-                            <TextPropFields
-                                field="email"
-                                label="E-mail"
-                                value={email}
-                                onChangeHandler={this.onChangeState}
-                                isvalid={errormessage_email == 0? true : false} /> 
-                                <div mb-3="true">                               
-                                    <table>
-                                        <tbody>
-                                        {this. createTableEmail()}
-                                        </tbody>
-                                    </table>
-                                </div>                                    
-                       
-                                    
-                            <TextPropFields 
-                                field="name"
-                                label="Name"
-                                value={name}
-                                onChangeHandler={this.onChangeState}
-                                isvalid={errormessage_name == 0? true : false} />
-                                <div mb-3="true">
-                                    <table>
-                                        <tbody>
-                                            {this.createTableName()}
-                                        </tbody>
-                                    </table>
-                                </div>                                   
-                      
-                      
-                            <TextPropFields 
-                                field="password"
-                                label="Password"
-                                value={password}
-                                onChangeHandler={this.onChangeState}
-                                isvalid={errormessage_pass == 0? true : false} />
-                                <div mb-3="true">                               
-                                <table>
-                                    <tbody>
-                                    {this.createTablePass()}
-                                    </tbody>
-                                </table>
-                                </div>
-                                                
+    return (
 
-                            
-                            <TextPropFields 
-                                field="confirmpassword"
-                                label="Confirm password"
-                                value={confirmpassword}
-                                onChangeHandler={this.onChangeState}
-                                isvalid={errormessage_confpass == 0? true : false} />    
-                                <div mb-3="true">                               
-                                <table>
-                                    <tbody>
-                                    {this.createTableConfPass()}
-                                    </tbody>
-                                </table>
-                                </div>    
-                    
-                     
-                      <button type="submit" className="btn btn-primary">Реєстрація</button>  
+        <div className="row">
+            <div className="offset-md-3 col-md-6">
+                <h1 className="text-center text-primary">Реєстрація</h1>
 
-                    </form>
-                </div>
+                <Formik
+                    initialValues={initState}
+                    validationSchema={validate()}
+                    onSubmit={onSubmitHandler}
+                >
+                    <Form>
+                        <TextInput
+                            label="Email"
+                            name="email"
+                            id="email"
+                            type="text"
+                        />
+                         {!!errorvalid &&<span className="text-danger">{errorvalid}</span> }
+
+                        <TextInput
+                            label="Name"
+                            name="name"
+                            id="name"
+                            type="text"
+                        />
+
+                        <TextInput
+
+                            label="Password"
+                            name="password"
+                            id="password"
+                            type="password"
+                        />
+
+                        <TextInput
+                            label="Confirm password"
+                            name="confirmpassword"
+                            id="confirmpassword"
+                            type="password"
+                        />
+                        <button type="submit" className="btn btn-primary">Реєстрація</button>
+                    </Form>
+                </Formik>
             </div>
+        </div>
 
-        )
-    }
+    )
+
 }
 
-export default withRouter(Register);
+export default Register;

@@ -1,9 +1,12 @@
 using AuthReact.Constants;
+using AuthReact.Helper;
 using AuthReact.Models;
+using AuthReact.Services;
 using CarShop.Domain;
 using CarShop.Domain.Entities.Identity;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,8 +16,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace AuthReact
 {
@@ -43,6 +48,36 @@ namespace AuthReact
             })
                 .AddEntityFrameworkStores<AppEFContext>()
                 .AddDefaultTokenProviders();
+
+            //Configuration from AppSettings
+            var appSettingSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingSection);
+
+            //Adding Athentication - JWT
+            var appsettings = appSettingSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appsettings.Key);
+
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(jwt => {
+                jwt.RequireHttpsMetadata = false;
+                jwt.SaveToken = false;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+
+            });
+
+            services.AddScoped<IJwtTokenService, JwtTokenServise>();
+
+
 
             services.AddControllersWithViews().AddFluentValidation();            
 
@@ -86,8 +121,11 @@ namespace AuthReact
                     Name = Roles.Operator
                 }).Result;
             }
-            app.UseRouting();
 
+            //Add admin with password
+            //app.AdminConfig();
+
+            app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

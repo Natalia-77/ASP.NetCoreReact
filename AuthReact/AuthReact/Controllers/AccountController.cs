@@ -1,5 +1,6 @@
 ﻿using AuthReact.Constants;
 using AuthReact.Models;
+using AuthReact.Services;
 using CarShop.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +19,16 @@ namespace AuthReact.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private IJwtTokenService _tokenService;
         public AccountController(UserManager<AppUser> userManager,
                                 SignInManager<AppUser> signInManager,
-                                RoleManager<AppRole> roleManager)
+                                RoleManager<AppRole> roleManager,
+                                 IJwtTokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _tokenService = tokenService;
         }
 
 
@@ -55,7 +59,10 @@ namespace AuthReact.Controllers
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
-                return Ok();
+                return Ok(new
+                {
+                    token = _tokenService.Authentificate(user)
+                });
             }
             catch
             {
