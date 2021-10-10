@@ -26,21 +26,25 @@ const Login =()=> {
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => formData.append(key, value));
             const result = await register_service.login(formData);
-            //console.log("Відправлені дані: ", values);
-            //console.log("Result data:", result.data.token);
+          
+            console.log("Відправлені дані: ", values);
+            console.log("Result data:", result.data.token);
+
             var jwt_token = result.data.token;
             var verified = jwt.decode(jwt_token);
-            //console.log("Verified.roles:", verified.roles);
+            console.log("Verified:",verified);
+            console.log("Verified.roles:", verified.roles);
+
             dispatch({ type: LOGIN_AUTH, payload: verified });
-            localStorage.setItem('Current user', jwt_token);
-           // console.log("Local:", localStorage);
+            localStorage.setItem('Current user', jwt_token);         
+                   
             authTokenRequest(jwt_token);
             history.push("/");
 
         }
         catch (errors) {
             var res = errors.response.data.errors;                   
-            console.log("Errors:",res);
+            //console.log("Errors:",res);
 
         }
 

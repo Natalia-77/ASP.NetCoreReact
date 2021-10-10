@@ -18,7 +18,7 @@ const Navbar =()=> {
         dispatch({type: LOG_OUT});
         history.push('/');
     };
-        const {role} = useSelector(res=>res.auth);
+        const {role,username} = useSelector(res=>res.auth);
        
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -45,7 +45,7 @@ const Navbar =()=> {
                         :
                         <ul className="navbar-nav">
                         <li className="nav-item">
-                            <Link className="nav-link" to="/profile"> {role}</Link>
+                            <Link className="nav-link" to="/profile">{username}</Link>
                         </li>
                         <li className="nav-item">
                             <Link to="/" className="nav-link" onClick={logout}>Вихід</Link>

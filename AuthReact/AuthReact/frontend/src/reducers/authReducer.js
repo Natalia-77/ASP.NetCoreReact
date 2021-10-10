@@ -16,7 +16,7 @@ function authReducer(state = initialState, action) {
         case REGISTER_AUTH: {
             return {
                 isAuth: true,
-                username: payload,
+                username: payload.name,
                 role:payload.roles
             }
             
@@ -24,7 +24,7 @@ function authReducer(state = initialState, action) {
         case LOGIN_AUTH: {
             return {
                 isAuth: true,
-                username: payload,
+                username: payload.name,
                 role:payload.roles
             }
         }
