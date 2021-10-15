@@ -8,8 +8,8 @@ const validate=()=>{
         email: Yup.string()
             .email('Введіть валідні дані')
             .required('Введіть пошту'),
-            name: Yup.string()
-            .required("Вкажіть прізвище"),  
+        name: Yup.string()
+            .required("Вкажіть прізвище"),         
         password: Yup.string()
             .required('Вкажіть пароль.')
             .min(3, 'Пароль має містить мінімум 3 символів.')

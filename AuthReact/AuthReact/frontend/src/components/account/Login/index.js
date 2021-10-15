@@ -25,6 +25,7 @@ const Login =()=> {
 
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => formData.append(key, value));
+           // console.log(formData);
             const result = await register_service.login(formData);
           
             console.log("Відправлені дані: ", values);

@@ -1,15 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/navbar/navbar';
 import Register from './components/account/Registration';
 import Login from './components/account/Login';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom';
-import ReactDOM from 'react-dom';
 import HomePage from './components/home';
 
 function App() {
   return (
-    <Router>
+    <>
       <Navbar />
       <div className="container">
         <Switch>
@@ -18,7 +16,7 @@ function App() {
           <Route exact path="/login"><Login/></Route>
         </Switch>
       </div>
-    </Router>
+    </>
 
   );
 }

@@ -1,14 +1,18 @@
-import React from 'react'
+import React,{useRef} from 'react'
 import register_service from '../../../service/register_service';
 import { useHistory } from 'react-router-dom';
 import { Formik, Form } from 'formik'
 import TextInput from '../../common/TextInput'
+import PhotoInput from '../../common/PhotoInput';
 import { useDispatch } from 'react-redux';
 import validate from './validation'
-import { REGISTER_AUTH,ERRORS } from '../../../actions/types';
-import { useSelector } from 'react-redux'
-import authTokenRequest from '../../../service/auth_request';
-import jwt from 'jsonwebtoken';
+import { ERRORS } from '../../../actions/types';
+import { useSelector } from 'react-redux';
+import http from "../../../http_common";
+import { RegisterUser } from '../../../actions/auth';
+import Spinner from '../../common/loader';
+//import authTokenRequest from '../../../service/auth_request';
+//import jwt from 'jsonwebtoken';
 
 
 const Register = () => {
@@ -16,38 +20,59 @@ const Register = () => {
     const initState = {
         email: '',
         name: '',
+        photo:null,
         password: '',
         confirmpassword: ''          
 
     }
 
-    const history = useHistory();
+   // const history = useHistory();
     const dispatch = useDispatch();
+    const { load } = useSelector(state => state.auth);
+    const refFormik=useRef();
 
     const onSubmitHandler = async (values) => {
 
         try {
-            const result = await register_service.register(values);
+            // console.log("submit data ", values);
+            // console.log("Дані по фото: ", JSON.stringify(
+            //     { 
+            //       fileName: values.photo.name, 
+            //       type: values.photo.type,
+            //       size: `${values.photo.size} bytes`
+            //     }
+            //   ));
+
+            const formData = new FormData();      
+            Object.entries(values).forEach(([key, value]) => formData.append(key, value));        
+            
+            //   for(let [key, value] of formData) {
+                 
+            //     console.log(`${key} = ${value}`); 
+            //   }
+            // const result = await register_service.register(formData);
+            // console.log("Result:",result);
+             dispatch(RegisterUser(formData));
+
+           // console.log("Відправлені дані: ", values);
+           // console.log("Result data:",result.data.token);
+
+            //var jwt_token=result.data.token;
+
+            //var verified = jwt.decode(jwt_token);            
+            //console.log("Verified.roles:",verified.roles);
+           // dispatch({type: REGISTER_AUTH, payload: verified});
+
            
-            console.log("Відправлені дані: ", values);
-            console.log("Result data:",result.data.token);
-
-            var jwt_token=result.data.token;
-
-            var verified = jwt.decode(jwt_token);            
-            console.log("Verified.roles:",verified.roles);
-            dispatch({type: REGISTER_AUTH, payload: verified});
-
-           
-            localStorage.setItem('Current user',jwt_token);
-            console.log("Local:",localStorage);
-            authTokenRequest(jwt_token);
-            history.push("/");
+           // localStorage.setItem('Current user',jwt_token);
+           // console.log("Local:",localStorage);
+           // authTokenRequest(jwt_token);
+           // history.push("/");
         }
         catch (problem) {
             //обробка помилок валідації на стороні сервера.
             var res = problem.response.data.errors;
-                   
+                
             console.log("Errors:",res);
             let answer_errors={
                     email:'',                    
@@ -75,13 +100,14 @@ const Register = () => {
         <div className="row">
             <div className="offset-md-3 col-md-6">
                 <h1 className="text-center text-primary">Реєстрація</h1>
-
-                <Formik
+                {load && <Spinner />}
+                <Formik 
+                    innerRef = {refFormik}
                     initialValues={initState}
                     validationSchema={validate()}
                     onSubmit={onSubmitHandler}
                 >
-                    <Form>
+                    <Form >
                         <TextInput
                             label="Email"
                             name="email"
@@ -96,6 +122,11 @@ const Register = () => {
                             id="name"
                             type="text"
                         />
+
+                         <PhotoInput
+                            refFormik={refFormik}
+                            field="photo"
+                        /> 
 
                         <TextInput
 
@@ -115,6 +146,8 @@ const Register = () => {
                     </Form>
                 </Formik>
             </div>
+
+            
         </div>
 
     )

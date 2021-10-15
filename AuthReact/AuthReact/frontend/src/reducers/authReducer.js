@@ -1,25 +1,27 @@
-import { REGISTER_AUTH,LOGIN_AUTH,LOG_OUT } from "../actions/types";
+import { REGISTER_AUTH,LOGIN_AUTH,LOG_OUT,REGISTER_BEGIN } from "../actions/types";
 
 
 const initialState ={
     isAuth: false,
     username: "",
-    role:""
+    role:"",
+    load:false
+  
 }
 
 
 function authReducer(state = initialState, action) {
     const {type, payload} = action;
-    console.log("reducer data", payload);
+    console.log("Reducer data :", payload);
 
     switch(type){
         case REGISTER_AUTH: {
-            return {
-                isAuth: true,
-                username: payload.name,
-                role:payload.roles
-            }
-            
+            return {               
+               isAuth: true,
+               username: payload.name,
+               role:payload.roles
+               //load:false
+            }            
         }
         case LOGIN_AUTH: {
             return {
@@ -33,6 +35,13 @@ function authReducer(state = initialState, action) {
                 isAuth: false,
                 username: "",
                 role:""
+            }
+        }
+        case REGISTER_BEGIN:{
+            return{
+                ...state,
+                load:true
+
             }
         }
 

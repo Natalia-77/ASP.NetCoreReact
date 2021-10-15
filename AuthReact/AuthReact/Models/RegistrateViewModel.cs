@@ -2,6 +2,7 @@
 using CarShop.Domain;
 using CarShop.Domain.Entities.Identity;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace AuthReact.Models
         public string Password { get; set; }
        
         public string ConfirmPassword { get; set; }
+
+        public IFormFile Photo { get; set; }
     }
 
     public class UserValidator : AbstractValidator<RegistrateViewModel>

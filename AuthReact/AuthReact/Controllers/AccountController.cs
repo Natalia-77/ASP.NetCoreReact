@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,16 +34,38 @@ namespace AuthReact.Controllers
 
 
         [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegistrateViewModel model)
+        [Route("register")]       
+        public async Task<IActionResult> RegisterAsync([FromForm] RegistrateViewModel model)
         {
+            //строчка для файлу фото профіля.            
+            string fileNameUser = string.Empty;
+
+            //якщо фото обрано:
+            if (model.Photo != null)
+            {
+                //розширення
+                var ext = Path.GetExtension(model.Photo.FileName);
+                //імя файла з розширенням.
+                fileNameUser = Path.GetRandomFileName() + ext;
+                //директорія,де знаходитиметься файл.
+                var dir = Path.Combine(Directory.GetCurrentDirectory(), "images");
+                //повний шлях до фото.
+                var filePath = Path.Combine(dir, fileNameUser);
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await model.Photo.CopyToAsync(stream);
+                }
+            }
+
             try
             {
 
                 var user = new AppUser
                 {
                     Email = model.Email,
-                    UserName = model.Name
+                    UserName = model.Name,
+                    ImageProfile = fileNameUser
 
                 };
 

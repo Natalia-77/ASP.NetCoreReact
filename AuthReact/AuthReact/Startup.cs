@@ -15,8 +15,10 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -77,7 +79,7 @@ namespace AuthReact
 
             services.AddScoped<IJwtTokenService, JwtTokenServise>();
 
-
+            //services.AddCors();
 
             services.AddControllersWithViews().AddFluentValidation();            
 
@@ -93,6 +95,9 @@ namespace AuthReact
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<AppRole> roleManager)
         {
+            //app.UseCors(options =>
+            //    options.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -124,6 +129,20 @@ namespace AuthReact
 
             //Add admin with password
             //app.AdminConfig();
+
+            string folderName = "images";
+            var dir = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(dir),
+                RequestPath = "/images"
+            });
+
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>
