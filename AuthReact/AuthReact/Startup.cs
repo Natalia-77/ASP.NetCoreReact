@@ -1,6 +1,7 @@
 using AuthReact.Constants;
 using AuthReact.Helper;
 using AuthReact.Models;
+using AuthReact.Models.Mapper;
 using AuthReact.Services;
 using CarShop.Domain;
 using CarShop.Domain.Entities.Identity;
@@ -78,12 +79,13 @@ namespace AuthReact
             });
 
             services.AddScoped<IJwtTokenService, JwtTokenServise>();
-
-            //services.AddCors();
-
+           
             services.AddControllersWithViews().AddFluentValidation();            
 
             services.AddTransient<IValidator<RegistrateViewModel>, UserValidator>();
+
+            //Automapper configure.
+            services.AddAutoMapper(typeof(UserProfile));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

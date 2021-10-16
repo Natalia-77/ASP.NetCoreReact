@@ -45,7 +45,7 @@ const Login =()=> {
         }
         catch (errors) {
             var res = errors.response.data.errors;                   
-            //console.log("Errors:",res);
+            console.log("Errors:",res);
 
         }
 
