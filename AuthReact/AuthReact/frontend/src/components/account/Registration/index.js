@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Formik, Form, ErrorMessage } from 'formik';
+import React, { useRef,useEffect} from 'react';
+import { Formik, Form } from 'formik';
 import TextInput from '../../common/TextInput';
 import PhotoInput from '../../common/PhotoInput';
 import { useDispatch } from 'react-redux';
@@ -64,8 +64,14 @@ const Register = () => {
         }
 
     }
-
     const { errorvalid } = useSelector(res => res.valid);
+
+    useEffect(() => {
+        refFormik.current.setErrors({
+           "email": errorvalid
+        })
+      }, [errorvalid]);
+    
 
     return (
 
@@ -87,7 +93,6 @@ const Register = () => {
                             id="email"
                             type="text"
                         />
-                        {!!errorvalid && <span className="text-danger">{errorvalid}</span>}
 
                         <TextInput
                             label="Name"
@@ -95,7 +100,7 @@ const Register = () => {
                             id="name"
                             type="text"
                         />
-
+                        
                         <PhotoInput
                             refFormik={refFormik}
                             field="photo"
