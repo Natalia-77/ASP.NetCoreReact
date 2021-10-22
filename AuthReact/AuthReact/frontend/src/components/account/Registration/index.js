@@ -1,5 +1,5 @@
-import React,{useRef} from 'react';
-import { Formik, Form } from 'formik';
+import React, { useRef } from 'react';
+import { Formik, Form, ErrorMessage } from 'formik';
 import TextInput from '../../common/TextInput';
 import PhotoInput from '../../common/PhotoInput';
 import { useDispatch } from 'react-redux';
@@ -8,79 +8,86 @@ import { ERRORS } from '../../../actions/types';
 import { useSelector } from 'react-redux';
 import { RegisterUser } from '../../../actions/auth';
 import Spinner from '../../common/loader';
-
-
+import { push } from 'connected-react-router';
 
 const Register = () => {
-
+    
     const initState = {
         email: '',
         name: '',
-        photo:null,
+        photo: null,
         password: '',
-        confirmpassword: ''          
+        confirmpassword: ''
 
     }
-
-   // const history = useHistory();
+   
     const dispatch = useDispatch();
     const { load } = useSelector(state => state.auth);
-    const refFormik=useRef();
+    const refFormik = useRef();
+    const titleRef = useRef();
 
     const onSubmitHandler = async (values) => {
 
         try {
-           
-            const formData = new FormData();      
-            Object.entries(values).forEach(([key, value]) => formData.append(key, value));      
-            dispatch(RegisterUser(formData));           
+
+            const formData = new FormData();
+            Object.entries(values).forEach(([key, value]) => formData.append(key, value));
+            dispatch(RegisterUser(formData))
+                .then(result => {
+                    dispatch(push("/"));
+                })
+                .catch(ex => {
+                    let answer_errors = {
+                        email: '',
+                    };
+                    Object.entries(ex.errors).forEach(([key, values]) => {
+                        let str = '';
+                        values.forEach(text => {
+                            str += text + " ";
+                        });
+                        answer_errors.email = str;
+                        dispatch({ type: ERRORS, payloads: answer_errors.email });
+
+                    })
+                })
+
+
+            titleRef.current.scrollIntoView({ behavior: 'smooth' });
+
+
         }
         catch (problem) {
-            //обробка помилок валідації на стороні сервера.
-            var res = problem.response.data.errors;
-                
-            console.log("Errors:",res);
-            let answer_errors={
-                    email:'',                    
-                };
 
-            if (res.Email) {
-                let str = "";
-                res.Email.forEach(element => {
-                    str += element + " ";
-                   // console.log(element);
-                });
-                answer_errors.email = str;
-            }
-            dispatch({type:ERRORS,payloads:answer_errors.email});          
-       }
+            var res = problem.response.data.errors;
+            console.log("Another errors:", res);
+
+        }
 
     }
 
-
-    const {errorvalid} = useSelector(res=>res.valid);
-    console.log("Error valid",errorvalid);
+    const { errorvalid } = useSelector(res => res.valid);
 
     return (
 
         <div className="row">
             <div className="offset-md-3 col-md-6">
-                <h1 className="text-center text-primary">Реєстрація</h1>
+                <h1 ref={titleRef} className="text-center text-primary">Реєстрація</h1>
                 {load && <Spinner />}
-                <Formik 
-                    innerRef = {refFormik}
+                <Formik
+                    innerRef={refFormik}
                     initialValues={initState}
                     validationSchema={validate()}
                     onSubmit={onSubmitHandler}
                 >
                     <Form >
+
                         <TextInput
                             label="Email"
                             name="email"
                             id="email"
                             type="text"
                         />
-                         {!!errorvalid &&<span className="text-danger">{errorvalid}</span> }
+                        {!!errorvalid && <span className="text-danger">{errorvalid}</span>}
 
                         <TextInput
                             label="Name"
@@ -89,10 +96,10 @@ const Register = () => {
                             type="text"
                         />
 
-                         <PhotoInput
+                        <PhotoInput
                             refFormik={refFormik}
                             field="photo"
-                        /> 
+                        />
 
                         <TextInput
 
@@ -113,7 +120,7 @@ const Register = () => {
                 </Formik>
             </div>
 
-            
+
         </div>
 
     )

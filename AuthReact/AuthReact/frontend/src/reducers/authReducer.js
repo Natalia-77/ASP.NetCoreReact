@@ -1,4 +1,4 @@
-import { REGISTER_AUTH,LOGIN_AUTH,LOG_OUT,REGISTER_BEGIN } from "../actions/types";
+import { REGISTER_AUTH,LOGIN_AUTH,LOG_OUT,REGISTER_BEGIN,REGISTER_FAIL } from "../actions/types";
 
 
 const initialState ={
@@ -27,7 +27,8 @@ function authReducer(state = initialState, action) {
             return {
                 isAuth: true,
                 username: payload.name,
-                role:payload.roles
+                role:payload.roles,
+                load:false
             }
         }
         case LOG_OUT: {
@@ -39,14 +40,24 @@ function authReducer(state = initialState, action) {
         }
         case REGISTER_BEGIN:{
             return{
-                ...state,
+               ...state,
                 load:true
 
             }
         }
+        case REGISTER_FAIL:{
+            return{
+                ...state,
+                load:false
+            }
+        }
+        default:{
+            return state;
+        }
 
     }
-    return state;
+   
+    
 }
 
 export default authReducer;

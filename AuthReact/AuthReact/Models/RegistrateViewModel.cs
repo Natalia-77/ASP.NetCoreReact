@@ -34,11 +34,16 @@ namespace AuthReact.Models
         public UserValidator(AppEFContext appEFContext)    
         {
             _appEFContext = appEFContext;
-           
+
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage(" Поле не може бути пустим!")
                 .EmailAddress().WithMessage(" Пароль має містити '@'")
-                .Must(BeValidEmail).WithName("Email").WithMessage("Такий користувач вже існує!");  
+                .DependentRules(() =>
+                {
+                    RuleFor(x => x.Email)
+                    .Must(BeValidEmail).WithName("Email").WithMessage("Такий користувач вже існує!");
+                });
+                
             
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Поле не може бути пустим ");

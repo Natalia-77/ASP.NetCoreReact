@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { logoutservice } from '../../service/logout.service';
@@ -35,7 +35,7 @@ const Navbar = () => {
                     </ul>
 
                     {(() => {
-                        if (role == "admin") {
+                        if (role === "admin") {
                             return (
                                 < li className="nav-item">
                                     <Link className="nav-link" to="/user">UserList</Link>
@@ -45,7 +45,7 @@ const Navbar = () => {
 
                     })()}
 
-                    {role == "" ?
+                    {role === "" ?
                         <ul className="navbar-nav">
 
                             <li className="nav-item">

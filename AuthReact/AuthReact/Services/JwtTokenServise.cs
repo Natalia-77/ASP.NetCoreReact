@@ -49,7 +49,7 @@ namespace AuthReact.Services
 
             var jwt = new JwtSecurityToken(
                signingCredentials: singCredentials,
-               expires: DateTime.Now.AddDays(100),
+               expires: DateTime.Now.AddDays(1),
                claims: roleClaims
                );
             return new JwtSecurityTokenHandler().WriteToken(jwt);
