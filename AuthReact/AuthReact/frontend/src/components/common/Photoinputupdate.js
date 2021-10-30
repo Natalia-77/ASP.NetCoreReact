@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-const PhotoInput=({refFormik,field,curphoto})=>{
+const PhotoInputUpdate=({refFormik,field,curphoto})=>{
 
-     const[photo,setPhoto]=useState("https://www.pairme.co/public/img/girl-default.jpg");
-    //const[photo,setPhoto]=useState(curphoto);
+    // const[photo,setPhoto]=useState("https://www.pairme.co/public/img/girl-default.jpg");
+    const[photo,setPhoto]=useState(curphoto);
     const OnChangeHandler=(event)=>{
         const file=event.currentTarget.files[0];
         setPhoto(URL.createObjectURL(file));       
@@ -34,4 +34,4 @@ const PhotoInput=({refFormik,field,curphoto})=>{
 
 }
 
-export default PhotoInput;
+export default PhotoInputUpdate;

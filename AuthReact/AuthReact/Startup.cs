@@ -84,6 +84,8 @@ namespace AuthReact
 
             services.AddTransient<IValidator<RegistrateViewModel>, UserValidator>();
 
+            services.AddTransient<IValidator<UpdateUsermodel>, UserUpdateValidator>();
+
             //Automapper configure.
             services.AddAutoMapper(typeof(UserProfile));
 

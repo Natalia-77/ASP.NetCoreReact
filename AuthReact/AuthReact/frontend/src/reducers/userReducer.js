@@ -2,24 +2,26 @@ import {GET_USERS } from "../actions/types";
 
 
 const initialState ={
-   list:[]
+  list:[]
   
 }
 
 function userReducer(state=initialState,action)
 {
-    const{type,payloads}=action;
-    console.log("Reducer user data :", payloads);
+    const{type,data}=action;
+    console.log("Reducer user data :", data);
 
     switch(type)
     {
         case GET_USERS: {
             return {               
-               list:payloads
+              list:data
+             
             }            
         }
-
+        default: 
+        return state;
     }
-    return state;
+    
 }
 export default userReducer;

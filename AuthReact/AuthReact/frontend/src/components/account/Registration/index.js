@@ -12,7 +12,7 @@ import { push } from 'connected-react-router';
 
 const Register = () => {
     
-    const initState = {
+    const initState = {        
         email: '',
         name: '',
         photo: null,
@@ -79,6 +79,7 @@ const Register = () => {
             <div className="offset-md-3 col-md-6">
                 <h1 ref={titleRef} className="text-center text-primary">Реєстрація</h1>
                 {load && <Spinner />}
+                
                 <Formik
                     innerRef={refFormik}
                     initialValues={initState}
