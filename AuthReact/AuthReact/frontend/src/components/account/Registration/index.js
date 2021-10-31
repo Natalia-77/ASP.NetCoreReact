@@ -10,6 +10,8 @@ import { RegisterUser } from '../../../actions/auth';
 import Spinner from '../../common/loader';
 import { push } from 'connected-react-router';
 
+
+
 const Register = () => {
     
     const initState = {        
@@ -22,10 +24,11 @@ const Register = () => {
     }
    
     const dispatch = useDispatch();
-    const { load } = useSelector(state => state.auth);
+    const {load} = useSelector(state => state.auth);
     const refFormik = useRef();
     const titleRef = useRef();
-
+     
+    
     const onSubmitHandler = async (values) => {
 
         try {
@@ -34,7 +37,9 @@ const Register = () => {
             Object.entries(values).forEach(([key, value]) => formData.append(key, value));
             dispatch(RegisterUser(formData))
                 .then(result => {
+                   
                     dispatch(push("/"));
+                    
                 })
                 .catch(ex => {
                     let answer_errors = {
@@ -69,16 +74,16 @@ const Register = () => {
     useEffect(() => {
         refFormik.current.setErrors({
            "email": errorvalid
-        })
-      }, [errorvalid]);
-    
+        })       
+      }, [errorvalid]);    
+     
 
     return (
-
+       
         <div className="row">
             <div className="offset-md-3 col-md-6">
                 <h1 ref={titleRef} className="text-center text-primary">Реєстрація</h1>
-                {load && <Spinner />}
+                { load && <Spinner />} 
                 
                 <Formik
                     innerRef={refFormik}
@@ -122,13 +127,15 @@ const Register = () => {
                             type="password"
                         />
                         <button type="submit" className="btn btn-primary">Реєстрація</button>
+                                        
                     </Form>
                 </Formik>
+                
             </div>
-
+                    
 
         </div>
-
+       
     )
 
 }

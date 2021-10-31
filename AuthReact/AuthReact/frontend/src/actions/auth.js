@@ -24,7 +24,7 @@ export const RegisterUser=(usermodel)=>async(dispatch)=>{
         setTimeout(()=>{
           dispatch({type: REGISTER_AUTH, payload: verified});
         },3000);
-
+     
         return Promise.resolve(result);       
        
     }

@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
+import "react-toastify/dist/ReactToastify.css";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';

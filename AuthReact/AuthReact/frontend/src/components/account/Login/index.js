@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import authTokenRequest from '../../../service/auth_request';
 
+
+
 const Login =()=> {
 
     const initState = {
@@ -17,8 +19,8 @@ const Login =()=> {
     }
 
     const dispatch = useDispatch();    
-    const history = useHistory();
-
+    const history = useHistory(); 
+   
     const onSubmitHandler= async(values) => {
 
         try {
@@ -39,7 +41,8 @@ const Login =()=> {
             dispatch({ type: LOGIN_AUTH, payload: verified });
             localStorage.setItem('Current user', jwt_token);         
                    
-            authTokenRequest(jwt_token);
+            authTokenRequest(jwt_token);  
+                  
             history.push("/");
 
         }
@@ -55,7 +58,8 @@ const Login =()=> {
 
             <div className="row">
                 <div className="offset-md-3 col-md-6">
-                    <h1 className="text-center">Вхід на сайт</h1>
+                    <h1 className="text-center">Вхід на сайт</h1>                  
+               
                     <Formik
                         initialValues={initState}
                         validationSchema={validate()}
@@ -75,8 +79,8 @@ const Login =()=> {
                                 id="password"
                                 type="password"
                             />
-
-                          <input type="submit" className="btn btn-success" value="Вхід"></input>
+                         
+                          <input type="submit" className="btn btn-success"  value="Вхід"></input>
                         </Form>
                     </Formik>
                 </div>
