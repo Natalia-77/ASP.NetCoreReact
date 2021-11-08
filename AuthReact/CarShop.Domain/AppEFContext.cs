@@ -1,4 +1,5 @@
-﻿using CarShop.Domain.Entities.Identity;
+﻿using CarShop.Domain.Entities;
+using CarShop.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,8 @@ namespace CarShop.Domain
         {
 
         }
-
-
+       
+        public virtual DbSet <Products> Products { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

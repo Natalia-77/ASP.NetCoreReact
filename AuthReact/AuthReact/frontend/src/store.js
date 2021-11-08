@@ -7,6 +7,7 @@ import errorReducer from "./reducers/errorReducer";
 import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import userReducer from "./reducers/userReducer";
+import productReducer from "./reducers/productReducer";
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -21,6 +22,7 @@ const rootReducer=combineReducers({
     auth:authReducer,
     valid:errorReducer,
     user:userReducer,
+    prod:productReducer,
     router: connectRouter(history)
 });
 

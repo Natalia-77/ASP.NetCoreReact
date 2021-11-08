@@ -2,6 +2,7 @@ using AuthReact.Constants;
 using AuthReact.Helper;
 using AuthReact.Models;
 using AuthReact.Models.Mapper;
+using AuthReact.Models.Mapper.Product;
 using AuthReact.Services;
 using CarShop.Domain;
 using CarShop.Domain.Entities.Identity;
@@ -88,6 +89,7 @@ namespace AuthReact
 
             //Automapper configure.
             services.AddAutoMapper(typeof(UserProfile));
+            services.AddAutoMapper(typeof(ProductProfile));
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -133,6 +135,7 @@ namespace AuthReact
 
             //Add admin with password
             //app.AdminConfig();
+           
 
             string folderName = "images";
             var dir = Path.Combine(Directory.GetCurrentDirectory(), folderName);

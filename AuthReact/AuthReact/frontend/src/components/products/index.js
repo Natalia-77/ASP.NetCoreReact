@@ -1,56 +1,50 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { GetUser } from '../../actions/users';
-import http from '../../http_common';
-import { Link } from 'react-router-dom';
+import { GetProducts } from "../../actions/products";
+import http from "../../http_common";
 
-const UserList = () => {
+const ProdList=()=>{
 
     const dispatch = useDispatch();
-    const  {list}  = useSelector(state => state.user);
-    
+    const{listproducts}= useSelector(state => state.prod);
     useEffect(() => {
-        dispatch(GetUser());
+        dispatch(GetProducts());
         console.log("UseEffect done:");
 
     }, []);
 
-//    const handleEdit=(id)=> {  
-//         dispatch(push("/edit/" + id));  
-//     }  
 
     return (
-        <>            
-            <table className="table">
+        <>   
+        <h1>Products</h1>         
+            { <table className="table">
                 <thead className="table table-bordered">
                     <tr>
                        <th scope="col">Id</th>
                         <th scope="col">Image</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Price</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {list && list.map((item) =>
-                            <tr key={item.email}>
+                    {listproducts && listproducts.map((item) =>
+                            <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>
-                                    <img src={http.defaults.baseURL + item.photo}
+                                    <img src={http.defaults.baseURL + item.image}
                                         alt="user photo"
                                         width="100"
                                     />
                                 </td>
                                 <td>{item.name}</td>
-                                <td> 
-                               
-                            <Link to={`/admin/user/edit/${item.id}`}>Edit</Link> ||  
-                            <Link to={`/admin/user/delete/${item.id}`}>Delete</Link>
-                            
-                        </td>  
+                                <td> {item.price} </td>                       
+                        
                             </tr>)}
                 </tbody>
-            </table>
+            </table> }
         </>
     )
-}
 
-export default UserList;
+
+}
+export default ProdList;

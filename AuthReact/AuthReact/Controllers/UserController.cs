@@ -87,7 +87,7 @@ namespace AuthReact.Controllers
         [Route("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var res = _context.Users.FirstOrDefault(x => x.Id == id);
+            var res =  _context.Users.FirstOrDefault(x => x.Id == id);
             if (res == null)
             {
                 return BadRequest(new { message = "Check id!" });

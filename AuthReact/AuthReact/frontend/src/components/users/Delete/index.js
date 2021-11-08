@@ -26,7 +26,7 @@ const DeleteUser = ({ match }) => {
             console.log("Confirm delete uder");
             dispatch(DeleteDataUser(userdel))
             .then(res=>{
-                dispatch(push("/user"));
+                dispatch(push("/admin/user"));
             })
 
         }

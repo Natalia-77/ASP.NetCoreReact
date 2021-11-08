@@ -8,7 +8,8 @@ import register_service from '../../../service/register_service';
 import { useHistory } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import authTokenRequest from '../../../service/auth_request';
-
+import { isRole } from '../../../actions/auth';
+import { push } from 'connected-react-router';
 
 
 const Login =()=> {
@@ -26,23 +27,21 @@ const Login =()=> {
         try {
 
             const formData = new FormData();
-            Object.entries(values).forEach(([key, value]) => formData.append(key, value));
-           // console.log(formData);
-            const result = await register_service.login(formData);
-          
+            Object.entries(values).forEach(([key, value]) => formData.append(key, value));          
+            const result = await register_service.login(formData);          
             console.log("Відправлені дані: ", values);
             console.log("Result data:", result.data.token);
-
             var jwt_token = result.data.token;
-            var verified = jwt.decode(jwt_token);
-            console.log("Verified:",verified);
-            console.log("Verified.roles:", verified.roles);
-
-            dispatch({ type: LOGIN_AUTH, payload: verified });
-            localStorage.setItem('Current user', jwt_token);         
-                   
+            var cur_user = jwt.decode(jwt_token);
+            console.log("Verified:",cur_user);
+            console.log("Verified.roles:", cur_user.roles);
+            dispatch({ type: LOGIN_AUTH, payload: cur_user });
+            localStorage.setItem('Current user', jwt_token);                     
             authTokenRequest(jwt_token);  
-                  
+            if (isRole(cur_user, 'admin')) {
+                dispatch(push("/admin"));
+                return;
+            } 
             history.push("/");
 
         }

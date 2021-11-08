@@ -11,8 +11,6 @@ namespace AuthReact.Models
         public int Id { get; set; }
         public string Email { get; set; }
         public string Photo { get; set; }
-
-       // public IFormFile Photo { get; set; }
         public string Name { get; set; }
       
 

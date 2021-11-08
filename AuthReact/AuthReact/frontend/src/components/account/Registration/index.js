@@ -12,7 +12,7 @@ import { push } from 'connected-react-router';
 
 
 
-const Register = () => {
+ const Register = () => {
     
     const initState = {        
         email: '',

@@ -40,7 +40,7 @@ const EditUser = ({ match }) => {
             Object.entries(value).forEach(([key, value]) => formData.append(key, value));
             dispatch(UpdateDataUser(userId,formData))
             .then(res=>{
-                dispatch(push("/user"));
+                dispatch(push("/admin/user"));
             })
             .catch(ex=>{
                 let answer_errors = {
