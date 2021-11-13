@@ -1,10 +1,8 @@
 import { ADD_TO_CARD } from "../actions/types";
 
 const initialState={
-    products:[],
-    catdItems:[]
-  
-        
+
+       catdItems:[]         
 }
 
 function cardReducer(state=initialState,action){
@@ -17,10 +15,12 @@ function cardReducer(state=initialState,action){
             const addeditem={
                 id:dataprod.id,
                 name:dataprod.name,
+                image:dataprod.image,
                 count:1,
                 price:dataprod.price
             };
-            console.log("addeditem",addeditem.count);
+           
+            console.log("addeditem",addeditem);
             return {               
                ...state,
                catdItems:[

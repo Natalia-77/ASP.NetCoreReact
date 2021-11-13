@@ -9,6 +9,7 @@ import { GetProducts } from "../../actions/products";
 import { push } from 'connected-react-router';
 import { ADD_TO_CARD } from "../../actions/types";
 import "./products.css";
+import Card from "./Card/card";
 
 
 const ProdList=()=>{
@@ -123,7 +124,8 @@ const renderListItem = (dataprod) => {
         onHide={e => this.setState({ visible: false })}
         maximizable={false}
             >
-                -----Таблиця для кошика-----
+               <Card/>
+               
             </Dialog>
 
         <div className="dataview-demo">

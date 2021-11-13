@@ -24,7 +24,7 @@ const rootReducer=combineReducers({
     valid:errorReducer,
     user:userReducer,
     prod:productReducer,
-    carde:cardReducer,
+    card:cardReducer,
     router: connectRouter(history)
 });
 
