@@ -8,6 +8,7 @@ import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import userReducer from "./reducers/userReducer";
 import productReducer from "./reducers/productReducer";
+import cardReducer from "./reducers/cardreducer";
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -23,6 +24,7 @@ const rootReducer=combineReducers({
     valid:errorReducer,
     user:userReducer,
     prod:productReducer,
+    carde:cardReducer,
     router: connectRouter(history)
 });
 

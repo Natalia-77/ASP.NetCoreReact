@@ -8,14 +8,14 @@ const initialState ={
 
 function userReducer(state=initialState,action)
 {
-    const{type,data}=action;
-    console.log("Reducer user data :", data);
+    const{type,datares}=action;
+    console.log("Reducer user data :", datares);
 
     switch(type)
     {
         case GET_USERS: {
             return {               
-              list:data
+              list:datares
              
             }            
         }

@@ -7,7 +7,7 @@ export const GetUser=()=>async(dispatch)=>{
        
         const result = await getuser_request.getdata(); 
         console.log("Result user:",result.data);        
-        dispatch({type: GET_USERS, data: result.data});    
+        dispatch({type: GET_USERS, datares: result.data});    
        
     }
     catch(error) {

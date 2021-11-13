@@ -13,11 +13,7 @@ const UserList = () => {
         dispatch(GetUser());
         console.log("UseEffect done:");
 
-    }, []);
-
-//    const handleEdit=(id)=> {  
-//         dispatch(push("/edit/" + id));  
-//     }  
+    }, []); 
 
     return (
         <>            
