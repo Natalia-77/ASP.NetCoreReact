@@ -62,8 +62,7 @@ const Navbar = (props) => {
         history.push('/');
     };
      const {isAuth, user } = useSelector(res => res.auth);   
-    //  const {count}= useSelector(state => state.card);
-     
+       
     return (
         !isAuth ?
         <Menubar style={{backgroundColor:'#ede9f2'}} model={navigationMenu} />

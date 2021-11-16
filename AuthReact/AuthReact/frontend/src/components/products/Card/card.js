@@ -38,28 +38,6 @@ const Card = () => {
                         <div className="p-text-bold">Total : {count}</div>
                     </table> }
                 </>
-        );
-    
-
-
-    // return (
-    //     <div className="shopping-cart-table">
-    //         <h2>Ваш кошик</h2>
-    //         <table className="table">
-    //             <thead />
-    //             <tbody>
-    //                 {
-    //                     items.map(rend)
-    //                 }
-    //             </tbody>
-
-    //         </table>
-    //         <div>
-    //             Total {total}
-    //         </div>
-
-    //     </div>
-
-    // );
+        );    
 }
 export default Card;
