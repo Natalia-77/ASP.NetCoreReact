@@ -1,5 +1,7 @@
-export const navitemuser = [
 
+
+export const navitemuser = [
+    
     {
         label: 'На головну',
         icon: 'pi pi-fw pi-home',
@@ -28,6 +30,13 @@ export const navitemuser = [
                 url: '/product'
             }
         ]
-    }  
+    },
+    
+    {
+        label: 'Your order',
+        icon: 'pi pi-shopping-cart',
+        url:'/basket'
+       
+    },
 
 ];

@@ -61,14 +61,15 @@ const Navbar = (props) => {
         dispatch({ type: LOG_OUT });
         history.push('/');
     };
-     const {isAuth, user } = useSelector(res => res.auth);
-
+     const {isAuth, user } = useSelector(res => res.auth);   
+    //  const {count}= useSelector(state => state.card);
+     
     return (
         !isAuth ?
         <Menubar style={{backgroundColor:'#ede9f2'}} model={navigationMenu} />
         :
         <Menubar style={{backgroundColor:'#ede9f2'}} model={navigationMenuUser}
-        end={<Button label={user.name} onClick={logout} icon="pi pi-power-off" style={{backgroundColor:'#f27cc9'}}/>}
+        end={<Button label={user.name}onClick={logout} icon="pi pi-power-off" style={{backgroundColor:'#f27cc9'}}/>}
          />
        
     )

@@ -5,8 +5,8 @@ import http from '../../../http_common';
 const Card = () => {
     
   
-    const  {catdItems} = useSelector(state => state.card);
-  
+    const  {catdItems,count} = useSelector(state => state.card);
+      
         return (
             <>   
                 <h1>Card</h1>         
@@ -17,6 +17,7 @@ const Card = () => {
                                  <th scope="col">Image</th>
                                  <th scope="col">Name</th>
                                  <th scope="col">Price</th>
+                                 <th scope="col">Quantity</th>
                              </tr>
                          </thead>
                          <tbody>
@@ -31,9 +32,10 @@ const Card = () => {
                                         </td>
                                         <td>{item.name}</td>
                                         <td> {item.price} </td>                       
-                                
+                                        <td> {item.quantity} </td>
                                     </tr>)}
                         </tbody>
+                        <div className="p-text-bold">Total : {count}</div>
                     </table> }
                 </>
         );
