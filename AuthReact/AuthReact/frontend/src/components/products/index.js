@@ -7,6 +7,7 @@ import { Rating } from 'primereact/rating';
 import { useSelector, useDispatch } from 'react-redux';
 import { GetProducts } from "../../actions/products";
 import { push } from 'connected-react-router';
+import {AddCartProduct} from "../../actions/cart";
 import { ADD_TO_CARD } from "../../actions/types";
 import "./products.css";
 import Card from "./Card/card";
@@ -35,11 +36,24 @@ const ProdList=()=>{
             dispatch(push("/product/add"));
         }
 
-        const AddToCard = (dataprod) => {
-   
-            console.log(dataprod.id);
-            dispatch({type:ADD_TO_CARD,dataprod:dataprod});
-            setState({visible:true});
+        const AddToCard = (e,dataprod) => {
+           e.preventDefault();
+            try {        
+              
+                dispatch(AddCartProduct(dataprod))
+                    .then(() => {
+                        setState({visible:true});
+                        console.log("Added!");
+                    })
+                    .catch(ex => {
+                    });
+            }
+            catch (error) {
+                console.log("Server is bad ", error);
+            }
+            // console.log(dataprod.id);
+            // dispatch({type:ADD_TO_CARD,dataprod:dataprod});
+            // setState({visible:true});
           };
    
     const onSortChange = (event) => {
@@ -81,7 +95,7 @@ const renderListItem = (dataprod) => {
                     </div>
                     <div className="product-list-action">
                         <span className="product-price">${dataprod.price}</span>
-                         <Button icon="pi pi-shopping-cart" label="Add to Cart" onClick={()=>AddToCard(dataprod)} style={{backgroundColor:'#DB7093'}} ></Button>
+                         <Button icon="pi pi-shopping-cart" label="Add to Cart" onClick={(e)=>AddToCard(e,dataprod)} style={{backgroundColor:'#DB7093'}} ></Button>
                        
                     </div>
                 </div>

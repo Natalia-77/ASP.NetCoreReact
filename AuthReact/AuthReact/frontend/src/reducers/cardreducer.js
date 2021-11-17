@@ -1,4 +1,4 @@
-import { ADD_TO_CARD } from "../actions/types";
+import { ADD_TO_CARD,CART_LOAD_PRODUCT } from "../actions/types";
 
 const initialState={
 
@@ -53,6 +53,19 @@ function cardReducer(state=initialState,action){
              
             }            
         }
+
+        case CART_LOAD_PRODUCT: {
+            let quantityAll = 0;
+            for(let i=0; i<dataprod.length; i++){
+                quantityAll+=dataprod[i].quantity;
+            }
+            return {
+                ...state,
+                catdItems: dataprod,
+                count: quantityAll
+            }
+        }
+
        
         default: 
         return state;

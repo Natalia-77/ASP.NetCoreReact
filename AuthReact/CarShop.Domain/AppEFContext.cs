@@ -22,6 +22,7 @@ namespace CarShop.Domain
         }
        
         public virtual DbSet <Products> Products { get; set; }
+        public virtual DbSet <Cart> Cart { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

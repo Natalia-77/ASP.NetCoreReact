@@ -10,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import authTokenRequest from '../../../service/auth_request';
 import { isRole } from '../../../actions/auth';
 import { push } from 'connected-react-router';
+import { getCartUser } from '../../../actions/cart'
 
 
 const Login =()=> {
@@ -38,6 +39,7 @@ const Login =()=> {
             dispatch({ type: LOGIN_AUTH, payload: cur_user });
             localStorage.setItem('Current user', jwt_token);                     
             authTokenRequest(jwt_token);  
+            dispatch(getCartUser());
             if (isRole(cur_user, 'admin')) {
                 dispatch(push("/admin"));
                 return;

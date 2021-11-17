@@ -16,6 +16,7 @@ namespace CarShop.Domain.Entities
         public string Name { get; set; }      
         public  string ImageProduct { get; set; }
         public decimal Price { get; set; }
+        public virtual ICollection<Cart> CartEntities { get; set; }
 
     }
 }
